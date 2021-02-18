@@ -29,6 +29,7 @@
               :clearable="false"
               :options="searchOption"
               :value="searchOption"
+              @change="searchTextChange"
               placeholder="Filtrar por..."
             />
           </b-col>
@@ -38,9 +39,11 @@
             <div class="d-flex align-items-center justify-content-end">
               <b-form-input
                 min-widht="100"
-                v-model="params.searchQuery"
                 class="d-inline-block mr-1"
                 placeholder="Pesquisar...."
+                v-model="searchQuery"
+                :disabled="!searchOption.label ? '' : disabled"
+                v-on:input="searchTextChange()"
               />
               <b-button
                 class="mr-1"
@@ -50,9 +53,9 @@
                 <span class="text-nowrap">Novo Usuario</span>
               </b-button>
               <b-dropdown id="Exportar" right text="Exportar" variant="primary">
-                <b-dropdown-item href="#">Exportar CSV</b-dropdown-item>
-                <b-dropdown-item href="#">Exportar EXCEL</b-dropdown-item>
-                <b-dropdown-item href="#">Exportar PDF</b-dropdown-item>
+                <b-dropdown-item href="#" @click="tblDataExport('CSV')">Exportar CSV</b-dropdown-item>
+                <b-dropdown-item href="#" @click="tblDataExport('EXCEL')">Exportar EXCEL</b-dropdown-item>
+                <b-dropdown-item href="#" @click="tblDataExport('PDF')">Exportar PDF</b-dropdown-item>
               </b-dropdown>
             </div>
           </b-col>
@@ -202,6 +205,10 @@
   import useUsersList from "./useUsersList";
   import userStoreModule from "../../../store/user";
   import UserListAddNew from "./UserListAddNew.vue";
+  import jsPDF from 'jspdf';
+  import 'jspdf-autotable';
+  import CsvExportor from 'csv-exportor';
+
   export default {
     components: {
       UsersListFilters,
@@ -235,11 +242,11 @@
     data() {
       return {
         users: {
-          userdata: [
-            {
+          originaldata: [
+ {
               name:"Paulie Durber",
               contrato: "(397) 294-5153",
-              Pais: "China",
+              Pais: "USA",
               Whatsapp: "company",
               email: "admin@gmail.pl",
               fullName: "Beverlie Krabbe",
@@ -250,7 +257,7 @@
             }, {
               name:"Saunder Offner",
               contrato: "(397) 124-5153",
-              Pais: "China",
+              Pais: "BR",
               Whatsapp: "company",
               email: "yuri@hotmail.com",
               fullName: "Beverlie Krabbe",
@@ -261,20 +268,236 @@
             }, {
               name:"Onfre Wind",
               contrato: "(397) 094-4325",
-              Pais: "China",
+              Pais: "JP",
               Whatsapp: "(397) 094-4325",
               email: "money@gmail.com",
-              fullName: "Beverlie Krabbe",
               id: 50,
               role: "writer",
               status: "active",
               currentPlan: "professional"
             }, {
               name:"Karena Courtliff",
-              user: "ok",
               contrato: "(397) 890-2134",
-              Pais: "Kerl Pais",
+              Pais: "RU",
+              Whatsapp: "(397) 890-2134",
+              email: "Jhon@yandex.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "owner",
+              status: "active",
+              currentPlan: "basic"
+            },{
+              name:"Paulie Durber",
+              contrato: "(397) 294-5153",
+              Pais: "USA",
               Whatsapp: "company",
+              email: "admin@gmail.pl",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "bkrabbe1d"
+            }, {
+              name:"Saunder Offner",
+              contrato: "(397) 124-5153",
+              Pais: "BR",
+              Whatsapp: "company",
+              email: "yuri@hotmail.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "member"
+            }, {
+              name:"Onfre Wind",
+              contrato: "(397) 094-4325",
+              Pais: "JP",
+              Whatsapp: "(397) 094-4325",
+              email: "money@gmail.com",
+              id: 50,
+              role: "writer",
+              status: "active",
+              currentPlan: "professional"
+            }, {
+              name:"Karena Courtliff",
+              contrato: "(397) 890-2134",
+              Pais: "RU",
+              Whatsapp: "(397) 890-2134",
+              email: "Jhon@yandex.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "owner",
+              status: "active",
+              currentPlan: "basic"
+            },{
+              name:"Paulie Durber",
+              contrato: "(397) 294-5153",
+              Pais: "USA",
+              Whatsapp: "company",
+              email: "admin@gmail.pl",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "bkrabbe1d"
+            }, {
+              name:"Saunder Offner",
+              contrato: "(397) 124-5153",
+              Pais: "BR",
+              Whatsapp: "company",
+              email: "yuri@hotmail.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "member"
+            }, {
+              name:"Onfre Wind",
+              contrato: "(397) 094-4325",
+              Pais: "JP",
+              Whatsapp: "(397) 094-4325",
+              email: "money@gmail.com",
+              id: 50,
+              role: "writer",
+              status: "active",
+              currentPlan: "professional"
+            }, {
+              name:"Karena Courtliff",
+              contrato: "(397) 890-2134",
+              Pais: "RU",
+              Whatsapp: "(397) 890-2134",
+              email: "Jhon@yandex.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "owner",
+              status: "active",
+              currentPlan: "basic"
+            }
+          ],
+          userdata: [
+            {
+              name:"Paulie Durber",
+              contrato: "(397) 294-5153",
+              Pais: "USA",
+              Whatsapp: "company",
+              email: "admin@gmail.pl",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "bkrabbe1d"
+            }, {
+              name:"Saunder Offner",
+              contrato: "(397) 124-5153",
+              Pais: "BR",
+              Whatsapp: "company",
+              email: "yuri@hotmail.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "member"
+            }, {
+              name:"Onfre Wind",
+              contrato: "(397) 094-4325",
+              Pais: "JP",
+              Whatsapp: "(397) 094-4325",
+              email: "money@gmail.com",
+              id: 50,
+              role: "writer",
+              status: "active",
+              currentPlan: "professional"
+            }, {
+              name:"Karena Courtliff",
+              contrato: "(397) 890-2134",
+              Pais: "RU",
+              Whatsapp: "(397) 890-2134",
+              email: "Jhon@yandex.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "owner",
+              status: "active",
+              currentPlan: "basic"
+            },{
+              name:"Paulie Durber",
+              contrato: "(397) 294-5153",
+              Pais: "USA",
+              Whatsapp: "company",
+              email: "admin@gmail.pl",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "bkrabbe1d"
+            }, {
+              name:"Saunder Offner",
+              contrato: "(397) 124-5153",
+              Pais: "BR",
+              Whatsapp: "company",
+              email: "yuri@hotmail.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "member"
+            }, {
+              name:"Onfre Wind",
+              contrato: "(397) 094-4325",
+              Pais: "JP",
+              Whatsapp: "(397) 094-4325",
+              email: "money@gmail.com",
+              id: 50,
+              role: "writer",
+              status: "active",
+              currentPlan: "professional"
+            }, {
+              name:"Karena Courtliff",
+              contrato: "(397) 890-2134",
+              Pais: "RU",
+              Whatsapp: "(397) 890-2134",
+              email: "Jhon@yandex.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "owner",
+              status: "active",
+              currentPlan: "basic"
+            },{
+              name:"Paulie Durber",
+              contrato: "(397) 294-5153",
+              Pais: "USA",
+              Whatsapp: "company",
+              email: "admin@gmail.pl",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "bkrabbe1d"
+            }, {
+              name:"Saunder Offner",
+              contrato: "(397) 124-5153",
+              Pais: "BR",
+              Whatsapp: "company",
+              email: "yuri@hotmail.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "member"
+            }, {
+              name:"Onfre Wind",
+              contrato: "(397) 094-4325",
+              Pais: "JP",
+              Whatsapp: "(397) 094-4325",
+              email: "money@gmail.com",
+              id: 50,
+              role: "writer",
+              status: "active",
+              currentPlan: "professional"
+            }, {
+              name:"Karena Courtliff",
+              contrato: "(397) 890-2134",
+              Pais: "RU",
+              Whatsapp: "(397) 890-2134",
               email: "Jhon@yandex.com",
               fullName: "Beverlie Krabbe",
               id: 50,
@@ -289,6 +512,7 @@
         },
 
         params: {
+          selectedSearchOption:"",
           searchQuery: "",
           sortBy: "id",
           isSortDirDesc: ""
@@ -324,7 +548,7 @@
       this.$store
         .dispatch("user/fetchUsers")
         .then(response => {
-          this.users.userdata = response.data.data;
+          // this.users.userdata = response.data.data;
           this.users.perPage = response.data.per_page;
           this.users.currentePage = response.data.current_page;
           this.users.usersTotal = response.data.total;
@@ -348,6 +572,68 @@
       resolveUserStatusVariant() {
         return "primary";
       },
+
+      searchTextChange(){
+        console.log("-------------")
+        console.log("-------------")
+        console.log("-------------")
+        var temp = this.users.originaldata;
+        var key = this.searchOption.label.label;
+        key = key === "Descrição"? "name": key;
+        var result = temp.filter((ele) => {
+          return ele[key.toLowerCase()].includes(this.searchQuery);
+        })
+        this.users.userdata = result;
+      },
+
+      tblDataExport(flag){
+        let rows = [];
+        let name = 'userslist_' + this.getCurrentDate();
+        let columnHeader = ['User', 'Email', 'Contrato', 'Pais', 'Whatsapp', 'Role', 'Plan', 'Status'];
+        this.users.userdata.map(data => {
+          var temp = [
+            data.name || '', 
+            data.email || '',
+            data.contrato || '', 
+            data.Pais || '', 
+            data.Whatsapp || '', 
+            data.role,
+            data.currentPlan,
+            data.status
+          ];
+          rows.push(temp);
+        })
+        if(flag === 'PDF'){
+            var doc = new jsPDF();
+            doc.autoTable(columnHeader, rows, { startY: 10 });
+            doc.save(name + '.pdf');
+        }else if(flag === "EXCEL"){
+          import('./exportExcel').then(excel => {
+            excel.export_json_to_excel({
+              header: columnHeader, //Header Required
+              data: rows, //Specific data Required
+              filename: name, //Optional
+              autoWidth: true, //Optional
+              bookType: 'xlsx' //Optional
+            })
+          })
+        }else if(flag === "CSV"){
+          CsvExportor.downloadCsv(
+            rows,
+            { header: columnHeader }, 
+            name+'.csv'
+          )
+        }
+      },
+
+      getCurrentDate(){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        return(mm + '/' + dd + '/' + yyyy);
+      }
     }
   };
 </script>
