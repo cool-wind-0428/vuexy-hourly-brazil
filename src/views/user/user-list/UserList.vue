@@ -40,7 +40,7 @@
                 min-widht="100"
                 v-model="params.searchQuery"
                 class="d-inline-block mr-1"
-                placeholder="Pesquisar..."
+                placeholder="Pesquisar...."
               />
               <b-button
                 class="mr-1"
@@ -222,10 +222,67 @@
       vSelect
     },
 
+    setup(){
+      const roleOptions = [
+        { label: 'Admin', value: 'admin' },
+        { label: 'Author', value: 'author' },
+        { label: 'Editor', value: 'editor' },
+        { label: 'Maintainer', value: 'maintainer' },
+        { label: 'Subscriber', value: 'subscriber' },
+      ]
+    },
+
     data() {
       return {
         users: {
-          userdata: [],
+          userdata: [
+            {
+              name:"Paulie Durber",
+              contrato: "(397) 294-5153",
+              Pais: "China",
+              Whatsapp: "company",
+              email: "admin@gmail.pl",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "bkrabbe1d"
+            }, {
+              name:"Saunder Offner",
+              contrato: "(397) 124-5153",
+              Pais: "China",
+              Whatsapp: "company",
+              email: "yuri@hotmail.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "editor",
+              status: "active",
+              currentPlan: "member"
+            }, {
+              name:"Onfre Wind",
+              contrato: "(397) 094-4325",
+              Pais: "China",
+              Whatsapp: "(397) 094-4325",
+              email: "money@gmail.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "writer",
+              status: "active",
+              currentPlan: "professional"
+            }, {
+              name:"Karena Courtliff",
+              user: "ok",
+              contrato: "(397) 890-2134",
+              Pais: "Kerl Pais",
+              Whatsapp: "company",
+              email: "Jhon@yandex.com",
+              fullName: "Beverlie Krabbe",
+              id: 50,
+              role: "owner",
+              status: "active",
+              currentPlan: "basic"
+            }
+          ],
           perPage: null,
           currentePage: null,
           usersTotal: null
@@ -290,7 +347,7 @@
 
       resolveUserStatusVariant() {
         return "primary";
-      }
+      },
     }
   };
 </script>

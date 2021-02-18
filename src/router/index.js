@@ -109,13 +109,13 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.auth !== 'guest') {
 
-    if (!store.getters['auth/isLoggedIn']) {
-      next('/login');
-    }
+    // if (!store.getters['auth/isLoggedIn']) {
+    //   next('/login');
+    // }
 
-    if (store.getters['auth/isLoggedIn']) {
+    // if (store.getters['auth/isLoggedIn']) {
       await store.dispatch('auth/loadUser')
-    }
+    // }
   }
 
   next();

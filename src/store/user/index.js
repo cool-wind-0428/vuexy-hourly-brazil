@@ -22,7 +22,6 @@ export default {
       })
     },
     fetchUser(ctx, { id }) {
-
       return new Promise((resolve, reject) => {
         axios
           .get('/user/show/' + id)
