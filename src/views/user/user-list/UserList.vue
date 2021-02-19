@@ -1,42 +1,28 @@
 <template>
   <div>
-    <!-- <user-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      @refetch-data="refetchData"
-    /> -->
-
-    <!-- Filters -->
-    <!-- <users-list-filters
-      :role-filter.sync="roleFilter"
-      :plan-filter.sync="planFilter"
-      :status-filter.sync="statusFilter"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      :status-options="statusOptions"
-    /> -->
-    <!-- Table Container Card -->
-    <b-card no-body class="mb-0">
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col cols="12" md="2">
-            <v-select
-              v-model="searchOption.label"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :clearable="false"
-              :options="searchOption"
-              :value="searchOption"
-              @change="searchTextChange"
-              placeholder="Filtrar por..."
-            />
-          </b-col>
-
-          <!-- Search -->
-          <b-col cols="12" md="10">
-            <div class="d-flex align-items-center justify-content-end">
+    <b-card no-body style="padding: 20px">
+            <b-card-body>
+              <b-row>
+                <b-col
+                  cols="12"
+                  md="4"
+                  class="mb-md-0 mb-2"
+                >
+                  <v-select
+                    v-model="searchOption.label"
+                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                    :clearable="false"
+                    :options="searchOption"
+                    :value="searchOption"
+                    @change="searchTextChange"
+                    placeholder="Filtrar por..."
+                  />
+                </b-col>
+                <b-col
+                  cols="12"
+                  md="4"
+                  class="mb-md-0 mb-2"
+                >
               <b-form-input
                 min-widht="100"
                 class="d-inline-block mr-1"
@@ -45,22 +31,32 @@
                 :disabled="!searchOption.label ? '' : disabled"
                 v-on:input="searchTextChange()"
               />
-              <b-button
-                class="mr-1"
-                variant="primary"
-                @click="isAddNewUserSidebarActive = true"
-              >
-                <span class="text-nowrap">Novo Usuario</span>
-              </b-button>
-              <b-dropdown id="Exportar" right text="Exportar" variant="primary">
-                <b-dropdown-item href="#" @click="tblDataExport('CSV')">Exportar CSV</b-dropdown-item>
-                <b-dropdown-item href="#" @click="tblDataExport('EXCEL')">Exportar EXCEL</b-dropdown-item>
-                <b-dropdown-item href="#" @click="tblDataExport('PDF')">Exportar PDF</b-dropdown-item>
-              </b-dropdown>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
+                </b-col>
+                <b-col
+                  cols="12"
+                  md="4"
+                  class="mb-md-0 mb-2"
+                >
+                <div class="d-flex align-items-center justify-content-end">
+                    <b-button
+                      class="mr-1"
+                      variant="primary"
+                      @click="isAddNewUserSidebarActive = true"
+                    >
+                      <span class="text-nowrap">Novo Usuario</span>
+                    </b-button>
+                    <b-dropdown id="Exportar" right text="Exportar" variant="primary">
+                      <b-dropdown-item href="#" @click="tblDataExport('CSV')">Exportar CSV</b-dropdown-item>
+                      <b-dropdown-item href="#" @click="tblDataExport('EXCEL')">Exportar EXCEL</b-dropdown-item>
+                      <b-dropdown-item href="#" @click="tblDataExport('PDF')">Exportar PDF</b-dropdown-item>
+                    </b-dropdown>
+                </div>
+                </b-col>
+              </b-row>
+            </b-card-body>
+          </b-card>
+    <!-- Table Container Card -->
+    <b-card no-body class="mb-0">
 
       <b-table
         ref="refUserListTable"
@@ -574,15 +570,14 @@
       },
 
       searchTextChange(){
-        console.log("-------------")
-        console.log("-------------")
-        console.log("-------------")
         var temp = this.users.originaldata;
         var key = this.searchOption.label.label;
         key = key === "Descrição"? "name": key;
+
         var result = temp.filter((ele) => {
           return ele[key.toLowerCase()].includes(this.searchQuery);
         })
+
         this.users.userdata = result;
       },
 
@@ -608,21 +603,25 @@
             doc.autoTable(columnHeader, rows, { startY: 10 });
             doc.save(name + '.pdf');
         }else if(flag === "EXCEL"){
+
           import('./exportExcel').then(excel => {
             excel.export_json_to_excel({
-              header: columnHeader, //Header Required
-              data: rows, //Specific data Required
-              filename: name, //Optional
-              autoWidth: true, //Optional
-              bookType: 'xlsx' //Optional
+              header: columnHeader,
+              data: rows,
+              filename: name,
+              autoWidth: true,
+              bookType: 'xlsx'
             })
           })
+
         }else if(flag === "CSV"){
+
           CsvExportor.downloadCsv(
             rows,
             { header: columnHeader }, 
             name+'.csv'
           )
+
         }
       },
 

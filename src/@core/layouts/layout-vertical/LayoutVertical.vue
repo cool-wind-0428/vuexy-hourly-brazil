@@ -80,7 +80,7 @@
     </footer>
     <!-- /Footer -->
 
-    <slot name="customizer" />
+    <!-- <slot name="customizer" /> -->
   </div>
 </template>
 

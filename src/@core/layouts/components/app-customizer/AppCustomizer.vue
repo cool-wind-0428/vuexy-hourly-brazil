@@ -20,9 +20,9 @@
     <div class="customizer-section d-flex justify-content-between align-items-center">
       <div>
         <h4 class="text-uppercase mb-0">
-          Theme Customizer
+          User Lists
         </h4>
-        <small>Customize &amp; Preview in Real Time</small>
+        <small>All &amp; Enable Users</small>
       </div>
       <feather-icon
         icon="XIcon"
@@ -32,148 +32,6 @@
       />
     </div>
     <!-- Header -->
-
-    <vue-perfect-scrollbar
-      :settings="perfectScrollbarSettings"
-      class="ps-customizer-area scroll-area"
-    >
-      <!-- Skin, RTL, Router Animation -->
-      <div class="customizer-section">
-
-        <!-- Skin -->
-        <b-form-group label="Skin">
-          <b-form-radio-group
-            id="skin-radio-group"
-            v-model="skin"
-            name="skin"
-            :options="skinOptions"
-          />
-        </b-form-group>
-
-        <!-- Skin -->
-        <b-form-group label="Content Width">
-          <b-form-radio-group
-            id="content-width-radio-group"
-            v-model="contentWidth"
-            name="content-width"
-            :options="contentWidthOptions"
-          />
-        </b-form-group>
-
-        <!-- RTL -->
-        <b-form-group
-          label="RTL"
-          label-cols="10"
-        >
-          <b-form-checkbox
-            v-model="isRTL"
-            class="mr-0 mt-50"
-            name="is-rtl"
-            switch
-            inline
-          />
-        </b-form-group>
-
-        <!-- Router Transition -->
-        <b-form-group
-          label="Router Transition"
-          label-cols="6"
-        >
-          <v-select
-            v-model="routerTransition"
-            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-            :clearable="false"
-            label="title"
-            :options="routerTransitionOptions"
-            :reduce="option => option.value"
-          />
-        </b-form-group>
-      </div>
-      <!-- /Skin, RTL, Router Animation -->
-
-      <!-- SECTION: Menu -->
-      <div class="customizer-section">
-
-        <!-- Layout Type -->
-        <b-form-group
-          label="Menu Layout"
-        >
-          <b-form-radio-group
-            v-model="layoutType"
-            name="layout-type"
-            :options="layoutTypeOptions"
-          />
-        </b-form-group>
-
-        <!-- Collapsible -->
-        <div
-          v-if="layoutType === 'vertical'"
-          class="d-flex justify-content-between align-items-center mt-2"
-        >
-          <span class="font-weight-bold">Menu Collapsed</span>
-          <b-form-checkbox
-            v-model="isVerticalMenuCollapsed"
-            name="is-vertical-menu-collapsed"
-            class="mr-0"
-            switch
-            inline
-          />
-        </div>
-
-        <!-- Menu Visiblity -->
-        <div class="d-flex justify-content-between align-items-center mt-2">
-          <span class="font-weight-bold">Menu Hidden</span>
-          <b-form-checkbox
-            v-model="isNavMenuHidden"
-            name="is-menu-visible"
-            class="mr-0"
-            switch
-            inline
-          />
-        </div>
-
-      </div>
-
-      <!-- SECTION: Navbar -->
-      <div class="customizer-section">
-
-        <!-- Navbar Color -->
-        <b-form-group
-          v-show="layoutType === 'vertical'"
-          label="Navbar Color"
-        >
-          <div
-            v-for="(color, index) in navbarColors"
-            :key="color"
-            class="p-1 d-inline-block rounded mr-1 cursor-pointer"
-            :class="[`bg-${color}`, {'border border-light': !index}, {'mark-active': navbarBackgroundColor === color}]"
-            @click="navbarBackgroundColor = color"
-          />
-        </b-form-group>
-
-        <!-- Navbar Type -->
-        <b-form-group :label="layoutType === 'vertical' ? 'Navbar Type' : 'Menu Type'">
-          <b-form-radio-group
-            v-model="navbarType"
-            name="navbar-type"
-            :options="navbarTypes"
-          />
-        </b-form-group>
-      </div>
-
-      <!-- SECTION: Footer -->
-      <div class="customizer-section">
-
-        <!-- Footer Type -->
-        <b-form-group label="Footer Type">
-          <b-form-radio-group
-            v-model="footerType"
-            name="footer-type"
-            :options="footerTypes"
-          />
-        </b-form-group>
-      </div>
-    </vue-perfect-scrollbar>
   </div>
 </template>
 

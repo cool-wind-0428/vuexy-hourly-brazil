@@ -93,7 +93,7 @@
       </slot>
     </footer>
 
-    <slot name="customizer" />
+    <!-- <slot name="customizer" /> -->
   </div>
 </template>
 

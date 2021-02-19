@@ -31,9 +31,9 @@ export default {
   components: {
 
     // Layouts
-    LayoutHorizontal,
+    // LayoutHorizontal,
     LayoutVertical,
-    LayoutFull,
+    // LayoutFull,
 
   },
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
